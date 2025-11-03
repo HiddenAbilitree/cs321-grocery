@@ -32,8 +32,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
       >
+        <header className='flex border-b border-stone-900 px-16 py-4'>
+          Grocery List
+        </header>
         {children}
       </body>
     </html>

@@ -1,67 +1,106 @@
-import Image from 'next/image';
+'use client';
+
+import Link from 'next/link';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { v4 } from 'uuid';
+
+const columns = [
+  { canonical: `name`, display: `List Name` },
+  { canonical: `creator`, display: `Creator` },
+  { canonical: `actions`, display: `Actions` },
+];
+
+type List = {
+  creator: string;
+  id: string;
+  name: string;
+};
 
 export default function Home() {
+  const [lists, setLists] = useState<List[]>([]);
+  const [newListName, setNewListName] = useState<string>(``);
   return (
-    <div className='flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black'>
-      <main className='flex min-h-screen w-full max-w-3xl flex-col items-center justify-between bg-white px-16 py-32 sm:items-start dark:bg-black'>
-        <Image
-          alt='Next.js logo'
-          className='dark:invert'
-          height={20}
-          priority
-          src='/next.svg'
-          width={100}
+    <section className='container mx-auto flex flex-col items-center justify-start gap-4'>
+      <div className='full flex w-full items-center justify-end gap-4 px-4 py-4'>
+        <input
+          className='rounded-sm border border-stone-800 bg-stone-900 px-4 py-2'
+          onChange={(input) => {
+            setNewListName(input.currentTarget.value);
+          }}
+          onSubmit={(e) => e.preventDefault()}
+          placeholder="The list's name"
+          value={newListName}
         />
-        <div className='flex flex-col items-center gap-6 text-center sm:items-start sm:text-left'>
-          <h1 className='max-w-xs text-3xl leading-10 font-semibold tracking-tight text-black dark:text-zinc-50'>
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className='max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400'>
-            Looking for a starting point or more instructions? Head over to{` `}
-            <a
-              className='font-medium text-zinc-950 dark:text-zinc-50'
-              href='https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
+        <button
+          className='h-min rounded-sm bg-white px-4 py-2 text-black hover:cursor-pointer hover:bg-stone-200'
+          onClick={() => {
+            if (newListName === ``) {
+              alert(`Please name your list`);
+              return;
+            }
+            setLists((curLists) => [
+              ...curLists,
+              { creator: `me`, id: v4(), name: newListName },
+            ]);
+            setNewListName(``);
+          }}
+        >
+          Create List
+        </button>
+      </div>
+      <table className='max-w-0 min-w-full overflow-x-auto rounded-sm bg-stone-900'>
+        <tr className='border-b border-stone-800'>
+          {columns.map((column) => (
+            <th
+              className='h-10 px-6 py-3 text-left align-middle text-xs font-semibold whitespace-nowrap'
+              key={column.canonical}
             >
-              Templates
-            </a>
-            {` `}
-            or the{` `}
-            <a
-              className='font-medium text-zinc-950 dark:text-zinc-50'
-              href='https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            >
-              Learning
-            </a>
-            {` `}
-            center.
-          </p>
-        </div>
-        <div className='flex flex-col gap-4 text-base font-medium sm:flex-row'>
-          <a
-            className='flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] md:w-[158px] dark:hover:bg-[#ccc]'
-            href='https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            <Image
-              alt='Vercel logomark'
-              className='dark:invert'
-              height={16}
-              src='/vercel.svg'
-              width={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className='flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]'
-            href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              {column.display}
+            </th>
+          ))}
+        </tr>
+        <tbody>
+          {lists.map((list) => (
+            <ListRow key={list.name} list={list} setLists={setLists} />
+          ))}
+        </tbody>
+      </table>
+    </section>
   );
 }
+
+const ListRow = ({
+  list,
+  setLists,
+}: {
+  list: List;
+  setLists: Dispatch<SetStateAction<List[]>>;
+}) => {
+  console.log(list.id);
+  return (
+    <tr className='border-b border-stone-800 transition-colors'>
+      {columns.map((column, i) => (
+        <td className='px-6 py-3 align-middle' key={i}>
+          {list[column.canonical as keyof typeof list]}
+        </td>
+      ))}
+      <td className='px-6 py-3 align-middle'>
+        <button
+          className='px-2 py-2'
+          onClick={() => {
+            setLists((lists) =>
+              lists.filter((searchedList) => searchedList.id !== list.id),
+            );
+          }}
+        >
+          x
+        </button>
+      </td>
+      <td className='px-6 py-3 align-middle'>
+        <Link className='px-2 py-2' href={`/lists/${list.id}`}>
+          View
+        </Link>
+      </td>
+    </tr>
+  );
+};
