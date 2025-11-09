@@ -81,11 +81,14 @@ const ListRow = ({
   console.log(list.id);
   return (
     <tr className='border-b transition-colors'>
-      {columns.map((column, i) => (
-        <td className='px-6 py-3 align-middle' key={i}>
-          {list[column.canonical as keyof typeof list]}
-        </td>
-      ))}
+      {/* {columns.map((column, i) => ( */}
+      {/*   <td className='px-6 py-3 align-middle' key={i}> */}
+      {/*     {list[column.canonical as keyof typeof list]} */}
+      {/*   </td> */}
+      {/* ))} */}
+
+      <td className='px-6 py-3 align-middle'>{list.name}</td>
+      <td className='px-6 py-3 align-middle'>{list.creator}</td>
       <td className='px-6 py-3 align-middle'>
         <button
           className='px-2 py-2'
@@ -97,8 +100,6 @@ const ListRow = ({
         >
           x
         </button>
-      </td>
-      <td className='px-6 py-3 align-middle'>
         <Link className='px-2 py-2' href={`/lists/${list.id}`}>
           View
         </Link>
