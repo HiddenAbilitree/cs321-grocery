@@ -38,6 +38,10 @@ export default function Home() {
               alert(`Please name your list`);
               return;
             }
+            if (lists.some((list) => list.name === newListName)) {
+              alert(`list already exists`);
+              return;
+            }
             setLists((curLists) => [
               ...curLists,
               { creator: `me`, id: v4(), name: newListName },
