@@ -34,9 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
       >
-        <header className='flex border-b border-stone-900 px-16 py-4'>
-          Grocery List
-        </header>
+        <header className='flex border-b px-16 py-4'>Grocery List</header>
         {children}
       </body>
     </html>

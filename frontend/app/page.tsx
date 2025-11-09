@@ -23,7 +23,7 @@ export default function Home() {
     <section className='container mx-auto flex flex-col items-center justify-start gap-4'>
       <div className='full flex w-full items-center justify-end gap-4 px-4 py-4'>
         <input
-          className='rounded-sm border border-stone-800 bg-stone-900 px-4 py-2'
+          className='rounded-sm border bg-background/80 px-4 py-2'
           onChange={(input) => {
             setNewListName(input.currentTarget.value);
           }}
@@ -32,7 +32,7 @@ export default function Home() {
           value={newListName}
         />
         <button
-          className='h-min rounded-sm bg-white px-4 py-2 text-black hover:cursor-pointer hover:bg-stone-200'
+          className='h-min rounded-sm border bg-background px-4 py-2 text-foreground hover:cursor-pointer hover:bg-background/20'
           onClick={() => {
             if (newListName === ``) {
               alert(`Please name your list`);
@@ -48,17 +48,19 @@ export default function Home() {
           Create List
         </button>
       </div>
-      <table className='max-w-0 min-w-full overflow-x-auto rounded-sm bg-stone-900'>
-        <tr className='border-b border-stone-800'>
-          {columns.map((column) => (
-            <th
-              className='h-10 px-6 py-3 text-left align-middle text-xs font-semibold whitespace-nowrap'
-              key={column.canonical}
-            >
-              {column.display}
-            </th>
-          ))}
-        </tr>
+      <table className='max-w-0 min-w-full overflow-x-auto rounded-sm border bg-background'>
+        <thead className='border bg-background'>
+          <tr className='border-b'>
+            {columns.map((column) => (
+              <th
+                className='h-10 px-6 py-3 text-left align-middle text-xs font-semibold whitespace-nowrap'
+                key={column.canonical}
+              >
+                {column.display}
+              </th>
+            ))}
+          </tr>
+        </thead>
         <tbody>
           {lists.map((list) => (
             <ListRow key={list.name} list={list} setLists={setLists} />
@@ -78,7 +80,7 @@ const ListRow = ({
 }) => {
   console.log(list.id);
   return (
-    <tr className='border-b border-stone-800 transition-colors'>
+    <tr className='border-b transition-colors'>
       {columns.map((column, i) => (
         <td className='px-6 py-3 align-middle' key={i}>
           {list[column.canonical as keyof typeof list]}
