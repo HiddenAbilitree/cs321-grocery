@@ -1,0 +1,193 @@
+@import 'tailwindcss';
+
+@utility optimize-legibility {
+  text-rendering: optimizeLegibility;
+}
+
+@theme {
+  --breakpoint-xl: 70rem;
+  --breakpoint-2xl: 80rem;
+  --text-2xs: 0.625rem;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-primary: var(--gray-1);
+  --color-primary-foreground: var(--gray-12);
+  --color-secondary: var(--gray-3);
+  --color-secondary-foreground: var(--gray-11);
+  --color-background: var(--color-background);
+  --color-foreground: var(--gray-12);
+  --color-card: var(--gray-1);
+  --color-popover: var(--gray-1);
+  --color-card-foreground: var(--gray-12);
+  --color-muted: var(--gray-6);
+  --color-muted-foreground: var(--gray-9);
+  --color-accent: var(--accent-4);
+  --color-constructive: var(--constructive);
+  --color-destructive: var(--destructive);
+  --color-border: var(--gray-a6);
+  --color-outline: var(--gray-6);
+  --color-input: var(--gray-2);
+  --color-ring: var(--gray-8);
+  --color-white-hover: var(--white-hover);
+}
+
+:root {
+  --radius: 0.625rem;
+  --constructive: oklch(0.6912 0.2343 139.44);
+  --destructive: oklch(0.577 0.245 27.325);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50 optimize-legibility tracking-tight antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* colors from https://www.radix-ui.com/colors/custom */
+
+
+:root {
+  --color-background: #fff;
+
+  --accent-1: #fbfdfe;
+  --accent-2: #f4fafd;
+  --accent-3: #e6f4fd;
+  --accent-4: #d6edfc;
+  --accent-5: #c4e4f8;
+  --accent-6: #b0d8f0;
+  --accent-7: #94c8e6;
+  --accent-8: #69b1db;
+  --accent-9: #3ca7dd;
+  --accent-10: #379bcd;
+  --accent-11: #007aae;
+  --accent-12: #12394e;
+
+  --accent-a1: #0080c004;
+  --accent-a2: #008cd10b;
+  --accent-a3: #008feb19;
+  --accent-a4: #0090ed29;
+  --accent-a5: #018be13b;
+  --accent-a6: #0082cf4f;
+  --accent-a7: #017cc46b;
+  --accent-a8: #007bc296;
+  --accent-a9: #008cd3c3;
+  --accent-a10: #0080bfc8;
+  --accent-a11: #007aae;
+  --accent-a12: #002a41ed;
+
+  --accent-contrast: #fff;
+  --accent-surface: #f1f9fdcc;
+  --accent-indicator: #3ca7dd;
+  --accent-track: #3ca7dd;
+
+  --gray-1: #fcfcfd;
+  --gray-2: #f9f9fb;
+  --gray-3: #eff0f3;
+  --gray-4: #e7e8ec;
+  --gray-5: #e0e1e6;
+  --gray-6: #d8d9e0;
+  --gray-7: #cdced7;
+  --gray-8: #b9bbc6;
+  --gray-9: #8b8d98;
+  --gray-10: #80828d;
+  --gray-11: #62636c;
+  --gray-12: #1e1f24;
+
+  --gray-a1: #00005503;
+  --gray-a2: #00005506;
+  --gray-a3: #00104010;
+  --gray-a4: #000b3618;
+  --gray-a5: #0009321f;
+  --gray-a6: #00073527;
+  --gray-a7: #00063332;
+  --gray-a8: #00083046;
+  --gray-a9: #00051d74;
+  --gray-a10: #00051b7f;
+  --gray-a11: #0002119d;
+  --gray-a12: #000107e1;
+
+  --gray-contrast: #FFFFFF;
+  --gray-surface: #ffffffcc;
+  --gray-indicator: #8b8d98;
+  --gray-track: #8b8d98;
+}
+
+
+
+@supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+
+    :root {
+      --accent-1: oklch(99.3% 0.0029 234.9);
+      --accent-2: oklch(98.1% 0.0074 234.9);
+      --accent-3: oklch(95.9% 0.0194 234.9);
+      --accent-4: oklch(93.4% 0.0322 234.9);
+      --accent-5: oklch(90.2% 0.0435 234.9);
+      --accent-6: oklch(86.1% 0.0545 234.9);
+      --accent-7: oklch(80.7% 0.0689 234.9);
+      --accent-8: oklch(73% 0.094 234.9);
+      --accent-9: oklch(69.1% 0.124 234.9);
+      --accent-10: oklch(65.3% 0.1172 234.9);
+      --accent-11: oklch(54.7% 0.124 234.9);
+      --accent-12: oklch(32.8% 0.0565 234.9);
+
+      --accent-a1: color(display-p3 0.0235 0.5137 0.7569 / 0.016);
+      --accent-a2: color(display-p3 0.0235 0.5137 0.8078 / 0.04);
+      --accent-a3: color(display-p3 0.0118 0.5059 0.8667 / 0.087);
+      --accent-a4: color(display-p3 0.0078 0.4902 0.8667 / 0.146);
+      --accent-a5: color(display-p3 0.0039 0.4745 0.8314 / 0.208);
+      --accent-a6: color(display-p3 0.0039 0.4392 0.749 / 0.279);
+      --accent-a7: color(display-p3 0.0039 0.4196 0.7098 / 0.377);
+      --accent-a8: color(display-p3 0 0.4 0.702 / 0.522);
+      --accent-a9: color(display-p3 0 0.451 0.7608 / 0.644);
+      --accent-a10: color(display-p3 0 0.4039 0.6784 / 0.671);
+      --accent-a11: color(display-p3 0 0.3333 0.5804 / 0.797);
+      --accent-a12: color(display-p3 0 0.1216 0.2078 / 0.887);
+
+      --accent-contrast: #fff;
+      --accent-surface: color(display-p3 0.9529 0.9725 0.9922 / 0.8);
+      --accent-indicator: oklch(69.1% 0.124 234.9);
+      --accent-track: oklch(69.1% 0.124 234.9);
+
+      --gray-1: oklch(99.1% 0.0015 277.7);
+      --gray-2: oklch(98.2% 0.003 277.7);
+      --gray-3: oklch(95.6% 0.0045 277.7);
+      --gray-4: oklch(93.1% 0.0061 277.7);
+      --gray-5: oklch(91% 0.0077 277.7);
+      --gray-6: oklch(88.8% 0.0093 277.7);
+      --gray-7: oklch(85.3% 0.0117 277.7);
+      --gray-8: oklch(79.4% 0.016 277.7);
+      --gray-9: oklch(64.6% 0.0165 277.7);
+      --gray-10: oklch(61% 0.0161 277.7);
+      --gray-11: oklch(50.3% 0.0139 277.7);
+      --gray-12: oklch(24.1% 0.0099 277.7);
+
+      --gray-a1: color(display-p3 0.0235 0.0235 0.349 / 0.012);
+      --gray-a2: color(display-p3 0.0235 0.0235 0.349 / 0.024);
+      --gray-a3: color(display-p3 0.0078 0.0667 0.2549 / 0.063);
+      --gray-a4: color(display-p3 0.0118 0.051 0.2157 / 0.095);
+      --gray-a5: color(display-p3 0.0039 0.0392 0.2 / 0.122);
+      --gray-a6: color(display-p3 0.0039 0.0275 0.1804 / 0.153);
+      --gray-a7: color(display-p3 0.0078 0.0275 0.1843 / 0.197);
+      --gray-a8: color(display-p3 0.0039 0.0314 0.1765 / 0.275);
+      --gray-a9: color(display-p3 0.0039 0.0196 0.1059 / 0.455);
+      --gray-a10: color(display-p3 0.0039 0.0196 0.098 / 0.499);
+      --gray-a11: color(display-p3 0 0.0078 0.0588 / 0.616);
+      --gray-a12: color(display-p3 0 0.0039 0.0275 / 0.883);
+
+      --gray-contrast: #FFFFFF;
+      --gray-surface: color(display-p3 1 1 1 / 80%);
+      --gray-indicator: oklch(64.6% 0.0165 277.7);
+      --gray-track: oklch(64.6% 0.0165 277.7);
+    }
+  }
+}

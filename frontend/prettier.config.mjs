@@ -5,5 +5,5 @@ import {
 } from '@hiddenability/opinionated-defaults/prettier';
 
 export default prettierConfig(prettierConfigBase, prettierConfigTailwind, {
-  tailwindStylesheet: `./app/globals.css`,
+  tailwindStylesheet: `./styles/globals.css`,
 });

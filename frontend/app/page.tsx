@@ -1,79 +1,128 @@
 'use client';
+import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import Link from 'next/link';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { v4 } from 'uuid';
-
+import { createList } from '@/actions/create-list';
+import { deleteList } from '@/actions/delete-list';
+import { getLists } from '@/actions/get-lists';
+import { Close, /* Edit,*/ Question } from '@/components/icons';
+import { List } from '@/lib/types';
 const columns = [
   { canonical: `name`, display: `List Name` },
   { canonical: `creator`, display: `Creator` },
-  { canonical: `actions`, display: `Actions` },
+  { canonical: `actions`, display: `` },
 ];
-
-type List = {
-  creator: string;
-  id: string;
-  name: string;
-};
-
 export default function Home() {
   const [lists, setLists] = useState<List[]>([]);
   const [newListName, setNewListName] = useState<string>(``);
+  useEffect(() => {
+    void getLists().then((data) => setLists(data));
+  }, []);
+
   return (
     <section className='container mx-auto flex flex-col items-center justify-start gap-4'>
-      <div className='full flex w-full items-center justify-end gap-4 px-4 py-4'>
+      <div className='flex w-full items-center justify-end gap-4'>
         <input
-          className='rounded-sm border bg-background/80 px-4 py-2'
+          className='rounded-sm border px-4 py-2'
           onChange={(input) => {
             setNewListName(input.currentTarget.value);
+          }}
+          onKeyDown={async (e) => {
+            if (e.key !== `Enter`) return;
+            if (newListName === ``) {
+              alert(`Please name your list`);
+              return;
+            }
+
+            const newList = await createList({ name: newListName });
+
+            if (!newList) {
+              alert(`list already exists`);
+              return;
+            }
+
+            if (newList.type === `error`) {
+              alert(`cooked`);
+              return;
+            }
+
+            setLists((curLists) => [
+              ...curLists,
+              { creator: `me`, id: newList.id, name: newListName },
+            ]);
+
+            setNewListName(``);
           }}
           onSubmit={(e) => e.preventDefault()}
           placeholder="The list's name"
           value={newListName}
         />
         <button
-          className='h-min rounded-sm border bg-background px-4 py-2 text-foreground hover:cursor-pointer hover:bg-background/20'
-          onClick={() => {
+          className='hover:bg-accent/80 h-min rounded-sm border bg-white px-4 py-2 text-black transition-colors hover:cursor-pointer'
+          onClick={async () => {
             if (newListName === ``) {
               alert(`Please name your list`);
               return;
             }
-            if (lists.some((list) => list.name === newListName)) {
+
+            const newList = await createList({ name: newListName });
+
+            if (!newList) {
               alert(`list already exists`);
               return;
             }
+
+            if (newList.type === `error`) {
+              alert(`cooked`);
+              return;
+            }
+
             setLists((curLists) => [
               ...curLists,
-              { creator: `me`, id: v4(), name: newListName },
+              { creator: `me`, id: newList.id, name: newListName },
             ]);
+
             setNewListName(``);
           }}
         >
           Create List
         </button>
       </div>
-      <table className='max-w-0 min-w-full overflow-x-auto rounded-sm border bg-background'>
-        <thead className='border bg-background'>
-          <tr className='border-b'>
-            {columns.map((column) => (
-              <th
-                className='h-10 px-6 py-3 text-left align-middle text-xs font-semibold whitespace-nowrap'
-                key={column.canonical}
-              >
-                {column.display}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {lists.map((list) => (
-            <ListRow key={list.name} list={list} setLists={setLists} />
-          ))}
-        </tbody>
-      </table>
+      <Lists lists={lists} setLists={setLists} />
     </section>
   );
 }
+
+const Lists = ({
+  lists,
+  setLists,
+}: {
+  lists: List[];
+  setLists: Dispatch<SetStateAction<List[]>>;
+}) => (
+  <div className='min-w-full max-w-0 overflow-x-auto rounded-sm border'>
+    <table className='w-full'>
+      <thead className={clsx(lists.length > 0 && `border-b`)}>
+        <tr className=''>
+          {columns.map((column) => (
+            <th
+              className='h-10 whitespace-nowrap px-6 py-3 text-left align-middle text-xs font-semibold'
+              key={column.canonical}
+            >
+              {column.display}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {lists.map((list) => (
+          <ListRow key={list.id} list={list} setLists={setLists} />
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 
 const ListRow = ({
   list,
@@ -82,31 +131,74 @@ const ListRow = ({
   list: List;
   setLists: Dispatch<SetStateAction<List[]>>;
 }) => {
+  const router = useRouter();
+  const [childHovered, setChildHovered] = useState(false); // cooked
+  const [confirmed, setConfirmed] = useState(false); // cooked
+
+  useEffect(() => {
+    if (confirmed) {
+      const timerId = setTimeout(() => {
+        setConfirmed(false);
+      }, 2500);
+
+      return () => {
+        clearTimeout(timerId);
+      };
+    }
+    return;
+  }, [confirmed]);
+
   console.log(list.id);
   return (
-    <tr className='border-b transition-colors'>
-      {/* {columns.map((column, i) => ( */}
-      {/*   <td className='px-6 py-3 align-middle' key={i}> */}
-      {/*     {list[column.canonical as keyof typeof list]} */}
-      {/*   </td> */}
-      {/* ))} */}
-
+    <tr
+      className={clsx(
+        `not-last:border-b transition-colors`,
+        !childHovered && `hover:bg-accent/20 hover:cursor-pointer`,
+      )}
+      onClick={() => {
+        router.push(`/lists/${list.id}`);
+      }}
+    >
       <td className='px-6 py-3 align-middle'>{list.name}</td>
       <td className='px-6 py-3 align-middle'>{list.creator}</td>
-      <td className='px-6 py-3 align-middle'>
+      <td className='flex justify-end gap-2 px-3 py-3 align-middle'>
+        {/* for changing list name later maybe */}
+        {/* <button */}
+        {/*   className='hover:bg-accent/50 inline-flex size-9 items-center justify-center rounded-sm border transition-colors hover:cursor-pointer' */}
+        {/*   onClick={(e) => { */}
+        {/*     e.stopPropagation(); */}
+        {/*   }} */}
+        {/*   onMouseEnter={() => setChildHovered(true)} */}
+        {/*   onMouseLeave={() => setChildHovered(false)} */}
+        {/* > */}
+        {/*   <Edit className='text-foreground' /> */}
+        {/* </button> */}
         <button
-          className='px-2 py-2'
-          onClick={() => {
+          className='bg-destructive hover:bg-destructive/70 inline-flex size-9 items-center justify-center rounded-sm border text-white transition-colors hover:cursor-pointer'
+          onClick={async (e) => {
+            e.stopPropagation();
+
+            if (!confirmed) {
+              setConfirmed(true);
+              return;
+            }
+
+            if (!(await deleteList(list.id))) {
+              alert(`failed to delete list.`);
+              return;
+            }
+
             setLists((lists) =>
               lists.filter((searchedList) => searchedList.id !== list.id),
             );
           }}
+          onMouseEnter={() => setChildHovered(true)}
+          onMouseLeave={() => setChildHovered(false)}
         >
-          x
+          {confirmed ?
+            <Question />
+          : <Close />}
         </button>
-        <Link className='px-2 py-2' href={`/lists/${list.id}`}>
-          View
-        </Link>
       </td>
     </tr>
   );
