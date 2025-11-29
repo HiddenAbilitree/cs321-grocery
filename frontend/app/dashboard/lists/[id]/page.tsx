@@ -120,7 +120,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                         price: Number.parseInt(newPrice),
                       };
 
-
                       const errors = [];
 
                       if (store.trim().length === 0) {

@@ -3,7 +3,7 @@
 import { DrizzleQueryError } from 'drizzle-orm';
 
 type List = {
-  creator?: string;
+  creator: string;
   name: string;
 };
 
@@ -13,13 +13,13 @@ import { ListResult } from '@/lib/types';
 export const createList = async (
   list: List,
 ): Promise<ListResult | undefined> => {
-  const { creator = `me`, name } = list;
+  const { creator, name } = list;
 
   try {
     if (name.trim().length === 0) return { type: `error` };
     const [{ id }] = await db
       .insert(listsTable)
-      .values({ creator: creator, name })
+      .values({ creator, name })
       .returning();
     return { id, type: `success` };
   } catch (error) {
