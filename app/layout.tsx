@@ -35,7 +35,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col gap-4 antialiased`}
       >
         <header className='flex border-b px-16 py-4'>
-          <Link className='text-2xl font-semibold hover:text-black' href='/dashboard'>
+          <Link
+            className='text-2xl font-semibold hover:text-black'
+            href='/dashboard'
+          >
             Grocery List
           </Link>
         </header>
