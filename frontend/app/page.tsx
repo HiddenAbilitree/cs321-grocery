@@ -7,6 +7,14 @@ import { createList } from '@/actions/create-list';
 import { deleteList } from '@/actions/delete-list';
 import { getLists } from '@/actions/get-lists';
 import { Close, /* Edit,*/ Question } from '@/components/icons';
+import {
+  Table,
+  TableBody,
+  TableData,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/table';
 import { List } from '@/lib/types';
 const columns = [
   { canonical: `name`, display: `List Name` },
@@ -59,7 +67,7 @@ export default function Home() {
           value={newListName}
         />
         <button
-          className='hover:bg-accent/80 h-min rounded-sm border bg-white px-4 py-2 text-black transition-colors hover:cursor-pointer'
+          className='h-min rounded-sm border bg-white px-4 py-2 text-black transition-colors hover:cursor-pointer hover:bg-accent/80'
           onClick={async () => {
             if (newListName === ``) {
               alert(`Please name your list`);
@@ -101,27 +109,25 @@ const Lists = ({
   lists: List[];
   setLists: Dispatch<SetStateAction<List[]>>;
 }) => (
-  <div className='min-w-full max-w-0 overflow-x-auto rounded-sm border'>
-    <table className='w-full'>
-      <thead className={clsx(lists.length > 0 && `border-b`)}>
-        <tr className=''>
-          {columns.map((column) => (
-            <th
-              className='h-10 whitespace-nowrap px-6 py-3 text-left align-middle text-xs font-semibold'
-              key={column.canonical}
-            >
-              {column.display}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {lists.map((list) => (
-          <ListRow key={list.id} list={list} setLists={setLists} />
+  <Table className='w-full'>
+    <TableHead>
+      <TableRow className=''>
+        {columns.map((column) => (
+          <TableHeader
+            className='h-10 px-6 py-3 text-left align-middle text-xs font-semibold whitespace-nowrap'
+            key={column.canonical}
+          >
+            {column.display}
+          </TableHeader>
         ))}
-      </tbody>
-    </table>
-  </div>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {lists.map((list) => (
+        <ListRow key={list.id} list={list} setLists={setLists} />
+      ))}
+    </TableBody>
+  </Table>
 );
 
 const ListRow = ({
@@ -150,18 +156,18 @@ const ListRow = ({
 
   console.log(list.id);
   return (
-    <tr
+    <TableRow
       className={clsx(
-        `not-last:border-b transition-colors`,
-        !childHovered && `hover:bg-accent/20 hover:cursor-pointer`,
+        `transition-colors not-last:border-b first:border-t`,
+        !childHovered && `hover:cursor-pointer hover:bg-accent/20`,
       )}
       onClick={() => {
         router.push(`/lists/${list.id}`);
       }}
     >
-      <td className='px-6 py-3 align-middle'>{list.name}</td>
-      <td className='px-6 py-3 align-middle'>{list.creator}</td>
-      <td className='flex justify-end gap-2 px-3 py-3 align-middle'>
+      <TableData>{list.name}</TableData>
+      <TableData>{list.creator}</TableData>
+      <TableData className='flex justify-end gap-2 p-3!'>
         {/* for changing list name later maybe */}
         {/* <button */}
         {/*   className='hover:bg-accent/50 inline-flex size-9 items-center justify-center rounded-sm border transition-colors hover:cursor-pointer' */}
@@ -174,7 +180,7 @@ const ListRow = ({
         {/*   <Edit className='text-foreground' /> */}
         {/* </button> */}
         <button
-          className='bg-destructive hover:bg-destructive/70 inline-flex size-9 items-center justify-center rounded-sm border text-white transition-colors hover:cursor-pointer'
+          className='inline-flex size-9 items-center justify-center rounded-sm border bg-destructive text-white transition-colors hover:cursor-pointer hover:bg-destructive/70'
           onClick={async (e) => {
             e.stopPropagation();
 
@@ -199,7 +205,7 @@ const ListRow = ({
             <Question />
           : <Close />}
         </button>
-      </td>
-    </tr>
+      </TableData>
+    </TableRow>
   );
 };

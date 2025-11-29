@@ -12,7 +12,10 @@ import { fileURLToPath } from 'node:url';
 
 export default eslintConfig([
   includeIgnoreFile(fileURLToPath(new URL(`.gitignore`, import.meta.url)), ``),
-	includeIgnoreFile(fileURLToPath(new URL(`../.gitignore`, import.meta.url)), ``),
+  includeIgnoreFile(
+    fileURLToPath(new URL(`../.gitignore`, import.meta.url)),
+    ``,
+  ),
   ...eslintConfigBase,
   ...eslintConfigNext,
   ...eslintConfigPerfectionist,
