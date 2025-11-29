@@ -16,6 +16,7 @@ export const createList = async (
   const { creator = `me`, name } = list;
 
   try {
+    if (name.trim().length === 0) return { type: `error` };
     const [{ id }] = await db
       .insert(listsTable)
       .values({ creator: creator, name })
