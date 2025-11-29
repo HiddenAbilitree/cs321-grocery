@@ -23,7 +23,6 @@ export const createList = async (
       .returning();
     return { id, type: `success` };
   } catch (error) {
-    console.error(error);
     return error instanceof DrizzleQueryError ? undefined : { type: `error` };
   }
 };
