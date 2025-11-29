@@ -1,7 +1,5 @@
 'use server';
 
-import { DrizzleQueryError } from 'drizzle-orm';
-
 import { db } from '@/db';
 import { itemsTable, listItemsTable } from '@/db/schema';
 export const addItem = async ({
@@ -25,7 +23,7 @@ export const addItem = async ({
       .returning();
 
     return id;
-  } catch (error) {
-    return error instanceof DrizzleQueryError ? undefined : { type: `error` };
+  } catch {
+    return undefined;
   }
 };
