@@ -111,7 +111,7 @@ const Lists = ({
 }) => (
   <Table className='w-full'>
     <TableHead>
-      <TableRow className=''>
+      <TableRow>
         {columns.map((column) => (
           <TableHeader
             className='h-10 px-6 py-3 text-left align-middle text-xs font-semibold whitespace-nowrap'
@@ -168,17 +168,6 @@ const ListRow = ({
       <TableData>{list.name}</TableData>
       <TableData>{list.creator}</TableData>
       <TableData className='flex justify-end gap-2 p-3!'>
-        {/* for changing list name later maybe */}
-        {/* <button */}
-        {/*   className='hover:bg-accent/50 inline-flex size-9 items-center justify-center rounded-sm border transition-colors hover:cursor-pointer' */}
-        {/*   onClick={(e) => { */}
-        {/*     e.stopPropagation(); */}
-        {/*   }} */}
-        {/*   onMouseEnter={() => setChildHovered(true)} */}
-        {/*   onMouseLeave={() => setChildHovered(false)} */}
-        {/* > */}
-        {/*   <Edit className='text-foreground' /> */}
-        {/* </button> */}
         <button
           className='inline-flex size-9 items-center justify-center rounded-sm border bg-destructive text-white transition-colors hover:cursor-pointer hover:bg-destructive/70'
           onClick={async (e) => {

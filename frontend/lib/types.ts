@@ -5,16 +5,19 @@ type Item = {
   name: string;
   price: number | undefined;
 };
+
 type List = {
   creator: string;
   id: string;
   name: string;
 };
+
 type ListData = {
   creator: string;
   items: Item[];
   name: string;
 };
+
 type ListError = { type: `error` };
 type ListResult = ListError | ListSuccess;
 
