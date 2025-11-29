@@ -7,17 +7,13 @@ import { deleteList } from '@/actions/delete-list';
 import { db } from '@/db';
 import { listsTable } from '@/db/schema';
 
-
 describe(`server actions should properly perform their functions`, () => {
   it(`should create the list`, async () => {
     await createList({ creator: `test`, name: `test list` });
     const ret = await db
       .delete(listsTable)
       .where(
-        and(
-          eq(listsTable.name, `test list`),
-          eq(listsTable.creator, `test`),
-        ),
+        and(eq(listsTable.name, `test list`), eq(listsTable.creator, `test`)),
       );
     expect(ret.rowCount).toBe(1);
   });
